@@ -1,0 +1,5 @@
+name = Meibailian
+description = A ecommerce theme based on bootstrap.
+version = "7.x-3.0"
+core = 7.x
+base theme = bootstrap

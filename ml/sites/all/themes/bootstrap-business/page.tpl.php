@@ -276,7 +276,7 @@
                             <!-- EOF: #action links -->
 
                             <?php print render($page['content']); ?>
-                            <?php print $feed_icons; ?>
+                            <?php if (theme_get_setting('bootstrap_business_display_feed_icons')){ print $feed_icons; } ?>
 
                         </div>
                         <!-- EOF:#content-wrapper -->

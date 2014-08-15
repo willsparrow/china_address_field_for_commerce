@@ -36,6 +36,7 @@ settings[breadcrumb_display]= 1
 settings[scrolltop_display]= 1
 settings[responsive_respond]= 0
 settings[bootstrap_js_include]= 0
+settings[bootstrap_business_display_feed_icons]= 0
 ; Information added by  packaging script on 2013-12-04
 version = "7.x-1.0"
 core = "7.x"
