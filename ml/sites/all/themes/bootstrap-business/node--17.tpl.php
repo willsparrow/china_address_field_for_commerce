@@ -28,8 +28,8 @@
       // dd($content,'ddlog_shoe');
     ?>
     <div class="row">
-      <div class="col-md-8"><?php print render($content['product:field_shoe_image']); $content['product:field_shoe_image']=''; ?></div>
-      <div class="col-md-4"><?php print render($content); ?></div>
+      <div class="col-md-8"><?php print render($content['product:field_shoe_image']); ?></div>
+      <div class="col-md-4"><?php $content_tmp=$content; $content_tmp['product:field_shoe_image']=''; print render($content_tmp); ?></div>
     </div>
   </div>
   <p> This is shoe 17.</p>
