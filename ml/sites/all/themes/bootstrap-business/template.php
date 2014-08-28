@@ -196,8 +196,8 @@ function bootstrap_business_preprocess_views_view(&$vars) {
 function bootstrap_business_form_commerce_cart_add_to_cart_form_alter(&$form, &$form_state, &$form_id) {
         //dpm($form_id);
         //dpm($form);
-        $form['quanlity']['#prefix'] = '<div class="container-product-quanlity-submit"> <div class="container-product-quanlity"> <div class="icon-product-quality"> <div class="product-add"> <span class="glyphicon glyphicon-plus product-add"></span> </div>';
-        $form['quantity']['#suffix'] = '<div class="product-del"> <span class="glyphicon glyphicon-minus product-del"></span> </div> </div> </div>';
-        $form['submit']['#prefix'] = '<div class="shoping-cart-submit"> <div class="icon-shopping-cart"> <span class="glyphicon glyphicon-shopping-cart icon-shopping-cart"></span> </div>';
+        $form['quanlity']['#prefix'] = '<div class="container-product-quanlity-submit"> <div class="container-product-quanlity"> <div class="icon-product-quality"> <div class="icon-product-add"> <span class="glyphicon glyphicon-plus product-add"></span> </div>';
+        $form['quantity']['#suffix'] = '<div class="icon-product-del"> <span class="glyphicon glyphicon-minus product-del"></span> </div> </div> </div>';
+        $form['submit']['#prefix'] = '<div class="container-product-submit"> <div class="icon-shopping-cart"> <span class="glyphicon glyphicon-shopping-cart shopping-cart"></span> </div>';
         $form['submit']['#suffix'] = '</div> </div>';
 }
