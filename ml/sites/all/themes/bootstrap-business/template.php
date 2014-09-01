@@ -96,8 +96,8 @@ function bootstrap_business_preprocess_page(&$vars) {
 		$vars['sidebar_grid_class'] = 'col-md-3';
 		$vars['main_grid_class'] = 'col-md-6';
 	} elseif ($vars['page']['sidebar_first'] || $vars['page']['sidebar_second']) {
-		$vars['sidebar_grid_class'] = 'col-md-4';
-		$vars['main_grid_class'] = 'col-md-8';		
+		$vars['sidebar_grid_class'] = 'col-md-3';
+		$vars['main_grid_class'] = 'col-md-9';		
 	} else {
 		$vars['main_grid_class'] = 'col-md-12';			
 	}
