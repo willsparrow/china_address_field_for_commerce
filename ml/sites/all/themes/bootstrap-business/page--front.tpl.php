@@ -137,7 +137,8 @@
                         <?php else : ?>
 
                         <?php print theme('links__system_main_menu', array('links' => $main_menu, 'attributes' => array('class' => array('main-menu', 'menu'), ), 'heading' => array('text' => t('Main menu'), 'level' => 'h2', 'class' => array('element-invisible'), ), )); ?>
-
+                        
+                        <?php //dd($secondary_menu,'ddlog_secondary_menu');  print theme('links__system_secondary_menu', array('links' => $secondary_menu, 'attributes' => array('class' => array('secondary-menu', 'menu'), ), 'heading' => array('text' => t('Secondary menu'), 'level' => 'h2', 'class' => array('element-invisible'), ), )); ?>
                         <?php endif; ?>
                     </nav>
                 </div>

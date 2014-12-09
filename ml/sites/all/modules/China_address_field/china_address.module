@@ -330,6 +330,7 @@ function china_address_get_region_name($region_id) {
 function china_address_dropdown_callback($form, $form_state) {
   // $lang = isset($form['language']['#value']) ?
   // $form['language']['#value'] : 'und';
+  // dpm($form);
   $lang = 'und';
   $form_name = $form_state['triggering_element']['#parents'][0];
   $field_name = 'field_china_address';

@@ -1,0 +1,258 @@
+<?php
+
+/**
+ * @file
+ * Integration ueditor for wysiwyg.
+ */
+
+/**
+ * Implementation of hook_init().
+ */
+function ueditor_init() {
+  if(module_exists('libraries')){
+    $lib_path = libraries_get_path('ueditor');
+    drupal_add_css($lib_path . '/themes/default/css/ueditor.css');
+  }
+  drupal_add_js(drupal_get_path('module', 'ueditor') . '/js/ueditor.toolbars.js');
+
+  // Load SyntaxHighlighter js and css.
+  if(variable_get('ueditor_highlighting_format') == 1){
+    drupal_add_css($lib_path . '/third-party/SyntaxHighlighter/shCoreDefault.css');
+    drupal_add_js($lib_path . '/third-party/SyntaxHighlighter/shCore.js', array('weight' => -1));
+    drupal_add_js('SyntaxHighlighter.all();', array('type' => 'inline', 'scope' => 'footer', 'weight' => 5));
+  }
+}
+
+/**
+ * Implements hook_permission().
+ */
+function ueditor_permission() {
+  $perms = array(
+    'upload file with ueditor' => array(
+      'title' => t('Upload file with ueditor'),
+    ),
+    'administer ueditor' => array(
+      'title' => t('Administer ueditor'),
+    ),
+  );
+
+  return $perms;
+}
+
+/**
+ * Implements hook_menu().
+ */
+function ueditor_menu() {
+  $items['admin/config/content/ueditor'] = array(
+    'title' => 'UEditor Global Settings',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('ueditor_global_settings'),
+    'description' => 'Configure ueditor global options.',
+    'access arguments' => array('administer ueditor'),
+    'restrict access' => TRUE,
+  );
+  $items['ueditor/controller'] = array(		
+    'title' => 'Ueditor Control',
+    'page callback' => '_ueditor_controller',		
+    'access arguments' => array('upload file with ueditor'),
+    'type' => MENU_CALLBACK,
+  );
+
+  return $items  ; 
+}
+
+/**
+ * Implements hook_wysiwyg_include_directory().
+ */
+function ueditor_wysiwyg_include_directory($type) {
+  switch ($type) {
+  case 'editors':
+    return $type;
+  }
+}
+
+/**
+ * The main entrance of ueditor command.
+ */
+function _ueditor_controller() {
+  //header('Access-Control-Allow-Origin: http://www.baidu.com'); //Set http://www.baidu.com allow cross-domain access
+  //header('Access-Control-Allow-Headers: X-Requested-With,X_Requested_With'); //Settings allow cross-domain header
+  date_default_timezone_set("Asia/Chongqing");
+  error_reporting(E_ERROR);
+  header("Content-Type: text/html; charset=utf-8");
+
+  $file_path = strtr(DRUPAL_ROOT,'\\','/') . '/' . drupal_get_path('module', 'ueditor');
+  $CONFIG = drupal_json_decode(preg_replace("/\/\*[\s\S]+?\*\//", "", file_get_contents($file_path . '/includes/config.json')), true);
+  $ueditor_uploadpath_config = variable_get('ueditor_uploadpath_config');
+
+  foreach($ueditor_uploadpath_config as $key => $pathitem){
+    if(isset($CONFIG[$key])){
+      $CONFIG[$key] = _ueditor_realpath($pathitem);
+    }
+  }
+
+  $action = $_GET['action'];
+
+  switch ($action) {
+    case 'config':
+      $result =  json_encode($CONFIG);
+      break;
+
+    /* upload image */
+    case 'uploadimage':
+    /* upload scrawl */
+    case 'uploadscrawl':
+    /* upload video */
+    case 'uploadvideo':
+    /* upload file */
+    case 'uploadfile':
+      $result = include($file_path. '/includes/action_upload.php');
+      break;
+
+    /* list image */
+    case 'listimage':
+      $result = include($file_path. '/includes/action_list.php');
+      break;
+    /* list file */
+    case 'listfile':
+      $result = include($file_path. '/includes/action_list.php');
+      break;
+
+    /* catch image */
+    case 'catchimage':
+      $result = include($file_path. '/includes/action_crawler.php');
+      break;
+
+    default:
+      $result = json_encode(array(
+        'state'=> t('Request address error')
+      ));
+      break;
+  }
+
+  /* output */
+  if (isset($_GET["callback"])) {
+    if (preg_match("/^[\w_]+$/", $_GET["callback"])) {
+      echo htmlspecialchars($_GET["callback"]) . '(' . $result . ')';
+    } else {
+      echo json_encode(array(
+        'state'=> t('callback parameters are not legitimate')
+      ));
+    }
+  } else {
+    echo $result;
+  }
+}
+
+/**
+ * Change %path to realpath.
+ */
+function _ueditor_realpath($path, $auto=FALSE) {
+  global $user;
+  $lib_path = 'sites/all/libraries';
+  $mod_path = drupal_get_path('module', 'ueditor');
+  $path = strtr($path,
+    array(
+      '%b' => base_path(),
+      '%m' => $mod_path,
+      '%l' => $lib_path,
+      '%f' => variable_get('file_public_path', conf_path() . '/files'),
+      '%d' => strtr(DRUPAL_ROOT,'\\','/'),
+      '%u' => $user->uid,
+    )
+  );
+  $path = strtr($path, '\\', '/');
+  if($auto) $path .= '/';
+  $path = str_replace('//', '/', $path);
+  return $path;
+}
+
+/**
+ * Config options for ueditor global settings.
+ */
+function ueditor_global_settings($form, &$form_state) {
+  $enable_paging = variable_get('ueditor_enable_paging',0);
+  if($enable_paging == 1){
+    if(!module_exists('paging')){
+      drupal_set_message(t('Please install the <a href="@url">Paging</a> module at first.', array('@url' => url("https://www.drupal.org/project/paging"))), 'error');
+    }
+  }
+  $form['global']['ueditor_highlighting_format'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Enable Highlighting Code Format'),
+    '#default_value' => variable_get('ueditor_highlighting_format',1),
+    '#description' => t('If enabled, when you insert code, the code will highlighting.'),
+  );
+  $form['global']['ueditor_enable_paging'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Enable Conent paging in ueditor'),
+    '#default_value' => variable_get('ueditor_enable_paging',0),
+    '#description' => t('If you want to use content paging in the ueditor, you must enable the <a href="@url">Paging</a> module at first.', array('@url' => url("https://www.drupal.org/project/paging"))),
+  );
+
+  $form['submit'] = array('#type' => 'submit', '#value' => t('Save'));
+
+  return $form;
+}
+
+/**
+ * Submit callback for ueditor global settings form.
+ */
+function ueditor_global_settings_submit($form, &$form_state) {
+  if(isset($form_state['values']['ueditor_highlighting_format'])) {
+    variable_set('ueditor_highlighting_format', $form_state['values']['ueditor_highlighting_format']);
+  }
+  if(isset($form_state['values']['ueditor_enable_paging'])) {
+    if($form_state['values']['ueditor_enable_paging'] == 1){
+      if(!module_exists('paging')){
+        drupal_set_message(t('Please install the <a href="@url">Paging</a> module at first.', array('@url' => url("https://www.drupal.org/project/paging"))), 'error');
+      }
+    }
+    variable_set('ueditor_enable_paging', $form_state['values']['ueditor_enable_paging']);
+  }
+  drupal_set_message(t('The config save successful.'));
+}
+
+/**
+ * Implementation of hook_node_presave().
+ */
+function ueditor_node_presave($node) {
+  if(variable_get('ueditor_enable_paging') == 1 && module_exists('paging')){
+    $words = variable_get('paging_separator', '<!--pagebreak-->');
+    if($words) {
+      if (!empty($words) && isset($node->body)) {
+        $node->body[LANGUAGE_NONE][0]['value'] = ueditor_replace_pagebeaketag($node->body[LANGUAGE_NONE][0]['value'], $words);
+      }
+    }
+  }
+}
+
+/**
+ * Implementation of hook_form_alter().
+ */
+function ueditor_form_alter(&$form, &$form_state, $form_id) {
+  $words = variable_get('paging_separator', '<!--pagebreak-->');
+  if (preg_match('/node_form$/', $form_id)) {
+    if($words) {
+      if (!empty($words) && isset($form['body'])) {
+        $form['body'][LANGUAGE_NONE][0]['#default_value'] = ueditor_unreplace_pagebeaketag($form['body'][LANGUAGE_NONE][0]['#default_value'], $words);
+      }
+    }
+  }
+}
+
+/**
+ * Replace page break tag.
+ */
+function ueditor_replace_pagebeaketag($body, $words) {
+  $body = str_replace(htmlentities(variable_get('paging_separator', '<!--pagebreak-->')), $words, $body);
+  return $body;
+}
+
+/**
+ * Unreplace page break tag.
+ */
+function ueditor_unreplace_pagebeaketag($body, $words) {
+  $body = str_replace($words, htmlentities(variable_get('paging_separator', '<!--pagebreak-->')), $body);
+  return $body;
+}

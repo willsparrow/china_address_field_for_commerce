@@ -1,0 +1,16 @@
+<?php
+
+/**
+ * Implements hook_install().
+ */
+function ueditor_install() {
+  variable_set('ueditor_highlighting_format',1);
+}
+
+/**
+ * Implements hook_uninstall().
+ */
+function ueditor_uninstall() {
+  variable_del('ueditor_uploadpath_config');
+  variable_del('ueditor_highlighting_format');
+}

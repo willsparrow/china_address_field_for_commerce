@@ -29,7 +29,10 @@
     ?>
     <div class="row">
       <div class="col-md-8"><?php print render($content['product:field_shoe_image']); ?></div>
-      <div class="col-md-4"><?php $content_tmp=$content; $content_tmp['product:field_shoe_image']=''; print render($content_tmp); ?></div>
+      <div class="col-md-4"><?php $content_tmp=$content; $content_tmp['product:field_shoe_image']=''; $content_tmp['body']=''; print render($content_tmp); ?></div>
+    </div>
+    <div class="row">
+      <div class="col-md-12"><?php print render($content['body']); ?></div>
     </div>
   </div>
   <p> This is shoe 17.</p>
