@@ -141,11 +141,6 @@
                         <?php //dd($secondary_menu,'ddlog_secondary_menu');  print theme('links__system_secondary_menu', array('links' => $secondary_menu, 'attributes' => array('class' => array('secondary-menu', 'menu'), ), 'heading' => array('text' => t('Secondary menu'), 'level' => 'h2', 'class' => array('element-invisible'), ), )); ?>
                         <?php endif; ?>
                     </nav>
-                    <!-- #my-shoping-cart -->
-                    <div id="my-shoping-cart">
-                        <?php $order_id = commerce_cart_order_id($user->uid); print views_embed_view('commerce_cart_block', 'default', $order_id); ?>
-                    </div>
-                    <!-- EOF: #my-shoping-cart -->
                 </div>
             </div>
         </div>

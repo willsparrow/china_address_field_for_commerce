@@ -192,7 +192,7 @@ function bootstrap_business_form_alter(&$form, &$form_state, $form_id) {
 function bootstrap_business_preprocess_views_view(&$vars) {
         dpm($vars);
 }
-*/
+ */
 function bootstrap_business_form_commerce_cart_add_to_cart_form_alter(&$form, &$form_state, &$form_id) {
         //dpm($form_id);
         //dpm($form);
@@ -201,3 +201,10 @@ function bootstrap_business_form_commerce_cart_add_to_cart_form_alter(&$form, &$
         $form['submit']['#prefix'] = '<div class="container-product-submit"> <div class="icon-shopping-cart"> <span class="glyphicon glyphicon-shopping-cart shopping-cart"></span> </div>';
         $form['submit']['#suffix'] = '</div> </div>';
 }
+/*
+ *dpm view info
+ *
+function bootstrap_business_views_query_alter(&$view, &$query){
+  	//dpm($view);
+}
+ */
