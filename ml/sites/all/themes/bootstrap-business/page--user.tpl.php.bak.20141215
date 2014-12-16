@@ -139,6 +139,8 @@
                         <?php print theme('links__system_main_menu', array('links' => $main_menu, 'attributes' => array('class' => array('main-menu', 'menu'), ), 'heading' => array('text' => t('Main menu'), 'level' => 'h2', 'class' => array('element-invisible'), ), )); ?>
 
                         <?php endif; ?>
+                        <span id="secondary-prefix">&rsaquo;</span>
+                        <?php print theme('links__system_secondary_menu', array('links' => $secondary_menu, 'attributes' => array('class' => array('menu', 'secondary-menu', 'links', 'clearfix')))); ?>
                     </nav>
                 </div>
             </div>
@@ -398,3 +400,5 @@
     </div>
 </footer>
 <!-- EOF:#subfooter -->
+
+<div>This is user login page</div>

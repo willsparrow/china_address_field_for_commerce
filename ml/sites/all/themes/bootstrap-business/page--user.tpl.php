@@ -1,7 +1,3 @@
-<?php if (theme_get_setting('scrolltop_display')): ?>
-<div id="toTop"><span class="glyphicon glyphicon-chevron-up"></span></div>
-<?php endif; ?>
-
 <?php if ($page['pre_header_first'] || $page['pre_header_second'] || $page['pre_header_third']) :?>
 <!-- #pre-header -->
 <div id="pre-header" class="clearfix">
@@ -123,31 +119,6 @@
 </header>
 <!-- EOF: #header --> 
 
-<!-- #main-navigation --> 
-<div id="main-navigation" class="clearfix">
-    <div class="container">
-
-        <!-- #main-navigation-inside -->
-        <div id="main-navigation-inside" class="clearfix">
-            <div class="row">
-                <div class="col-md-12">
-                    <nav role="navigation">
-                        <?php if ($page['navigation']) :?>
-                        <?php print drupal_render($page['navigation']); ?>
-                        <?php else : ?>
-
-                        <?php print theme('links__system_main_menu', array('links' => $main_menu, 'attributes' => array('class' => array('main-menu', 'menu'), ), 'heading' => array('text' => t('Main menu'), 'level' => 'h2', 'class' => array('element-invisible'), ), )); ?>
-
-                        <?php endif; ?>
-                    </nav>
-                </div>
-            </div>
-        </div>
-        <!-- EOF: #main-navigation-inside -->
-
-    </div>
-</div>
-<!-- EOF: #main-navigation -->
 
 <?php if ($page['banner']) : ?>
 <!-- #banner -->
@@ -225,18 +196,6 @@
 
                     <!-- #main -->
                     <div id="main" class="clearfix">
-                    
-                        <?php if ($breadcrumb && theme_get_setting('breadcrumb_display')):?> 
-                        <!-- #breadcrumb -->
-                        <div id="breadcrumb" class="clearfix">
-                            <!-- #breadcrumb-inside -->
-                            <div id="breadcrumb-inside" class="clearfix">
-                            <?php print $breadcrumb; ?>
-                            </div>
-                            <!-- EOF: #breadcrumb-inside -->
-                        </div>
-                        <!-- EOF: #breadcrumb -->
-                        <?php endif; ?>
 
                         <?php if ($page['promoted']):?>
                         <!-- #promoted -->
@@ -398,3 +357,5 @@
     </div>
 </footer>
 <!-- EOF:#subfooter -->
+
+<div>This is user login page</div>

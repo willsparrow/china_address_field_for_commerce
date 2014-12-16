@@ -143,7 +143,7 @@
                     </nav>
                     <!-- #my-shoping-cart -->
                     <div id="my-shoping-cart">
-                        <?php $order_id = commerce_cart_order_id($user->uid); print views_embed_view('commerce_cart_block', 'default', $order_id); ?>
+                        <?php $block_my_shoping_cart = _block_get_renderable_array(_block_render_blocks(array(block_load('commerce_cart', 'cart')))); print render($block_my_shoping_cart); ?>
                     </div>
                     <!-- EOF: #my-shoping-cart -->
                 </div>
